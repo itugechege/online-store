@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "products_subcategory")
+@Table(name = "products_subcategory", schema = "products_schema")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductSubCategory {

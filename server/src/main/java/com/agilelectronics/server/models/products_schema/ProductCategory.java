@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "product_category")
+@Table(name = "product_category", schema = "products_schema")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCategory {

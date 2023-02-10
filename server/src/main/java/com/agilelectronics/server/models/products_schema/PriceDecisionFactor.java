@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "price_decision_factor")
+@Table(name = "price_decision_factor", schema = "products_schema")
 @NoArgsConstructor
 @AllArgsConstructor
 public class PriceDecisionFactor {

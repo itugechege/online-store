@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "option_values")
+@Table(name = "option_values", schema = "products_schema")
 @NoArgsConstructor
 @AllArgsConstructor
 public class OptionValue {

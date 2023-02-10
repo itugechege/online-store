@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "currency_decision_factor")
+@Table(name = "currency_decision_factor", schema = "products_schema")
 @NoArgsConstructor
 @AllArgsConstructor
 public class CurrencyDecisionFactor {
