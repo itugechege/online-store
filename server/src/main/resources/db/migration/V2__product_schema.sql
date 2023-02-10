@@ -1,7 +1,7 @@
 --#PRODUCTS SCHEMA.
 
 CREATE TABLE products_schema.product_category(
-    id SERIAL NOT NULL,
+    id SERIAL PRIMARY KEY NOT NULL,
     product_type VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
@@ -10,38 +10,108 @@ CREATE TABLE products_schema.product_category(
 );
 
 CREATE TABLE products_schema.products_subcategory(
-    id  SERIAL NOT NULL,
+    id  SERIAL PRIMARY KEY NOT NULL,
     category_id BIGINT NOT NULL,
     sub_category VARCHAR(255),
     description VARCHAR(255),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    status BOOLEAN
+    status BOOLEAN,
+    CONSTRAINT category_to_sub_fk FOREIGN KEY (category_id) REFERENCES products_schema.product_category(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
 );
 
 CREATE TABLE products_schema.price_decision_factor(
-    id SERIAL NOT NULL,
+    id SERIAL PRIMARY KEY NOT NULL,
     price_desicion_factor VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     updated_at TIMESTAMP,
-    status BOOLEAN
+    status BOOLEAN,
 );
 
 CREATE TABLE products_schema.currency_decision_factor(
-    Id SERIAL NOT NULL,
+    Id SERIAL PRIMARY KEY NOT NULL,
     currency_type VARCHAR(50) NULL,
     description VARCHAR(200) NULL,
     updated_by VARCHAR(50) NULL,
     last_updated TIMESTAMP NULL,
-    status BOOLEAN NULL
+    status BOOLEAN NULL,
 );
 
+
+
+
+CREATE TABLE products_schema.options (
+    id SERIAL PRIMARY KEY NOT NULL,
+    option_name VARCHAR(255) NOT NULL,
+    option_description TEXT,
+    updated_at TIMESTAMP,
+    status BOOLEAN,
+);
+
+C
+
+CREATE TABLE products_schema.option_values (
+    id SERIAL PRIMARY KEY NOT NULL,
+    option_id BIGINT,
+    option_values VARCHAR(255),
+    description TEXT,
+    uptated_at TIMESTAMP,
+    status BOOLEAN
+    CONSTRAINT option_fk FOREIGN KEY (option_id) REFERENCES products_schema.options (id)
+);
+CREATE TABLE products_schema.products(
+    id SERIAL PRIMARY KEY NOT NULL, --PRODUCT ID
+    price_decision_factor BIGINT NOT NULL,
+    product_sub_category BIGINT NOT NULL,
+    currency_decision BIGINT NOT NULL,
+    name VARCHAR NOT NULL, --PRODUCT NAME
+    description TEXT NOT NULL,
+    price MONEY NOT NULL,
+    sku VARCHAR(50),
+    availability_count BIGINT NOT NULL,
+    percentage_discoutn FLOAT NOT NULL,
+    special_offer_min_qty VARCHAR(10) NOT NULL,
+    min_alowed_buy_qty VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    status BOOLEAN,
+    CONSTRAINT FOREIGN KEY (price_decision_factor) REFERENCES products_schema.currency_decision_factor(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (product_category) REFERENCES products_schema.products_subcategory(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (currency_decision) REFERENCES products_schema.currency_decision_factor(id)
+        ON DELETE SET DEFAULT
+        ON UPDATE CASCADE,
+);
+
+CREATE TABLE products_schema.product_options (
+ id SERIAL PRIMARY KEY NOT NULL,
+ option_id BIGINT NOT NULL,
+ option_value_id BIGINT NOT NULL,
+ product_id BIGINT NOT NULL,
+ CONSTRAINT FOREIGN KEY (option_id) REFERENCES products_schema.options (id)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+ CONSTRAINT FOREIGN KEY (option_value_id) REFERENCES products_schema.option_values (id)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+CONSTRAINT FOREIGN KEY (product_id) REFERENCES products_schema.products (id)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+  );
+
 CREATE TABLE products_schema.price_history (
-    id SERIAL NOT NULL,
     product_id BIGINT,
     previous_price MONEY,
     current_price MONEY,
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP,
+    CONSTRAINT FOREIGN KEY (product_id) REFERENCES products_schema.products (id)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
 );
 
 CREATE TABLE products_schema.product_image_details (
@@ -59,45 +129,9 @@ CREATE TABLE products_schema.product_image_details (
     product_image_10 VARCHAR(500),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    status BOOLEAN
+    status BOOLEAN,
+    CONSTRAINT PRIMARY KEY(id),
+    CONSTRAINT FOREIGN KEY (product_id) REFERENCES products_schema.products (id)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE
 );
-
-CREATE TABLE products_schema.options (
-    id SERIAL NOT NULL,
-    option_name VARCHAR(255) NOT NULL,
-    option_description TEXT,
-    updated_at TIMESTAMP,
-    status BOOLEAN
-);
-
-CREATE TABLE products_schema.option_values (
-    id SERIAL NOT NULL,
-    option_id BIGINT,
-    option_values VARCHAR(255),
-    description TEXT,
-    uptated_at TIMESTAMP,
-    status BOOLEAN
-);
-CREATE TABLE products_schema.products(
-    id SERIAL NOT NULL, --PRODUCT ID
-    price_desicion_factor BIGINT NOT NULL,
-    product_subcategory BIGINT NOT NULL,
-    currency_decision BIGINT NOT NULL,
-    name VARCHAR NOT NULL, --PRODUCT NAME
-    description TEXT NOT NULL,
-    price MONEY NOT NULL,
-    sku VARCHAR(50),
-    availability_count BIGINT NOT NULL,
-    percentage_discoutn FLOAT NOT NULL,
-    special_offer_min_qty VARCHAR(10) NOT NULL,
-    min_alowed_buy_qty VARCHAR(10) NOT NULL,
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP,
-    status BOOLEAN
-);
-
-CREATE TABLE product_options (
- id SERIAL NOT NULL,
- option_id BIGINT NOT NULL,
- product_id BIGINT NOT NULL
-)
