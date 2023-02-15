@@ -9,32 +9,33 @@ CREATE TABLE checkout_and_orders.cart (
     updated_at TIMESTAMP
 );
 
-CREATE TABLE checkout_and_orders.cart_items (
-    id SERIAL NOT NULL,
-    product_id BIGINT NOT NULL,
-    cart_id BIGINT NOT NULL,
-    product_sku VARCHAR(50) NOT NULL,
-    discoutn_offered FLOAT NOT NULL,
-    status VARCHAR(100) NOT NULL SET DEFAULT 'pendig_purchase',
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP
-);
-
 CREATE TABLE checkout_and_orders.cart_items_options (
     id SERIAL NOT NULL,
-    cart_items_id BIGINT NOT NULL,
-    producr_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
     product_option BIGINT NOT NULL,
     option_value BIGINT NOT NULL
 );
 
--- CREATE TABLE orders
+CREATE TABLE checkout_and_orders.cart_items (
+    id SERIAL NOT NULL,
+    product_id BIGINT NOT NULL,
+    cart_item_option BIGING NOT NULL,
+    cart_id BIGINT NOT NULL,
+    product_sku VARCHAR(50) NOT NULL,
+    discount_offered FLOAT NOT NULL,
+    status VARCHAR(100) NOT NULL SET DEFAULT 'pending_purchase',
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    CONSTRAINT cart_item_option_fk FOREIGN KEY (cart_item_option) REFERENCES checkout_and_orders.cart_items_options(id)
+);
+
 CREATE TABLE checkout_and_orders.shipping_mode(
     id SERIAL UNIQUE NOT NULL,
     shipping_mode VARCHAR(255) NOT NULL,
     description VARCHAR(255)NOT NULL,
 );
 
+-- CREATE TABLE order
 CREATE TABLE shipping_cost(
     id SERIAL UNIQUE NOT NULL,
     mode_id BIGINT NOT NULL,
