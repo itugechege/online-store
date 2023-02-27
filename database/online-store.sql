@@ -1,9 +1,10 @@
 CREATE SCHEMA user_schema();
 CREATE SCHEMA products();
+CREATE SCHEMA orders_schema():
 
 
 
-CREATE TABLE users(
+CREATE TABLE user_schema.users(
     id UUID UNIQUE PRIMARY KEY NOT NULL,
     username VARCHAR(100) NOT NULL UNIQUE,
     f_name VARCHAR(200),
@@ -14,7 +15,7 @@ CREATE TABLE users(
 
 );
 
-CREATE TABLE password_reset(
+CREATE TABLE user_schema.password_reset(
     user_id BIGINT NOT NULL,
     reset_code VARCHAR(500) NOT NULL,
     previous_password VARCHAR(255) NOT NULL,
@@ -94,3 +95,4 @@ CREATE TABLE product(
     stock_count BIGINT NOT NULL DEFAULT 0, --Products in stock.
 
 );
+
